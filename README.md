@@ -27,5 +27,5 @@ Dependencies
 ------------
 
 * SOAP::Lite
-
+* YAML::Tiny
 
