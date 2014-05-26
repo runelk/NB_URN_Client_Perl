@@ -1,0 +1,7 @@
+config:
+  urn:
+    wsdl: http://foo.bar.baz
+    proxy: http://foo.bar.baz
+    username: foo
+    password: bar
+    prefix: baz

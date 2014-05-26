@@ -1,0 +1,18 @@
+#!/usr/bin/env perl
+
+use File::Basename;
+use File::Spec;
+use Data::Dumper;
+use lib File::Spec->catdir(dirname(__FILE__), '..', 'lib');
+require NbUrnClient;
+use Getopt::Long;
+
+my %options = (); # = {};
+
+GetOptions(
+    \%options,
+    "urn=s"
+);
+
+my $c = new NbUrnClient();
+print Dumper($c->find_urn($options{urn}));
