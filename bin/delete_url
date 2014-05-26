@@ -25,7 +25,7 @@ GetOptions(
     "config=s" => \$config
 );
 
-unless ($urn && $url) { die "Usage: register_urn --urn URN --url URL\n"; };
+unless ($urn && $url) { die "Usage: create_urn --series-code CODE --urn URN\n"; };
 
 my $c = new NbUrnClient(
     config_file => $config || $default_config,
@@ -34,6 +34,6 @@ my $c = new NbUrnClient(
 );
 
 $c->login();
-print Dumper($c->register_urn($urn, $url));
+print Dumper($c->delete_url($urn, $url));
 $c->logout();
 

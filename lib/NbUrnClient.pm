@@ -29,34 +29,52 @@ sub new {
 sub add_url {
     my ($self, $urn, $url) = @_;
 
-    die "Not implemented yet.";
-    # if (defined $self->{sso_token}) {
-    # }
-    # else {
-    # 	die "No SSO token acquired, you must log in first.";
-    # }
+    if (defined $self->{sso_token}) {
+	my $som = $self->{client}->call(
+	    'addURL',
+	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
+	    SOAP::Data->value(SOAP::Data->name('URN')->value($urn)),
+	    SOAP::Data->value(SOAP::Data->name('URL')->value($url)),	    
+	    );
+	die $som->faultstring if ($som->fault);
+	return $som->result;
+    } else {
+    	die "No SSO token acquired, you must log in first.";
+    }
 }
 
 sub create_urn {
-    my ($self, $seriesCode, $url) = @_;
+    my ($self, $series_code, $urn) = @_;
 
-    die "Not implemented yet.";
-    # if (defined $self->{sso_token}) {
-    # }
-    # else {
-    # 	die "No SSO token acquired, you must log in first.";
-    # }
+    if (defined $self->{sso_token}) {
+	my $som = $self->{client}->call(
+	    'createURN',
+	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
+	    SOAP::Data->value(SOAP::Data->name('seriesCode')->value($series_code)),
+	    SOAP::Data->value(SOAP::Data->name('URN')->value($urn)),	    
+	    );
+	die $som->faultstring if ($som->fault);
+	return $som->result;
+    } else {
+    	die "No SSO token acquired, you must log in first.";
+    }
 }
 
 sub delete_url {
     my ($self, $urn, $url) = @_;
 
-    die "Not implemented yet.";
-    # if (defined $self->{sso_token}) {
-    # }
-    # else {
-    # 	die "No SSO token acquired, you must log in first.";
-    # }
+    if (defined $self->{sso_token}) {
+	my $som = $self->{client}->call(
+	    'deleteURL',
+	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
+	    SOAP::Data->value(SOAP::Data->name('URN')->value($urn)),
+	    SOAP::Data->value(SOAP::Data->name('URL')->value($url)),	    
+	    );
+	die $som->faultstring if ($som->fault);
+	return $som->result;
+    } else {
+    	die "No SSO token acquired, you must log in first.";
+    }
 }
 
 sub find_urn {
@@ -84,23 +102,30 @@ sub find_urns_for_url {
 sub get_next_urn {
     my ($self, $seriesCode) = @_;
 
-#     if (defined $self->{sso_tdie "Not implemented yet.";
-# oken}) {
-#     }
-#     else {
-# 	die "No SSO token acquired, you must log in first.";
-#     }
-# }
+    if (defined $self->{sso_token}) {
+	my $som = $self->{client}->call(
+	    'getNextURN',
+	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
+	    SOAP::Data->value(SOAP::Data->name('seriesCode')->value($urn))
+	    );
+
+	die $som->faultstring if ($som->fault);
+	return $som->result;
+    } else {
+    	die "No SSO token acquired, you must log in first.";
+    }
 }
 
 sub login {
     my ($self, $username, $password) = @_;
+
     my $som = $self->{client}->call(
     	'login',
 	SOAP::Data->value(SOAP::Data->name('username')->value($username || $self->{config}->{username})),
 	SOAP::Data->value(SOAP::Data->name('password')->value($password || $self->{config}->{password}))
 	);
     die $som->faultstring if ($som->fault);
+
     $self->{sso_token} = $som->result;
     return $som->result;
 }
@@ -137,46 +162,68 @@ sub register_urn {
 sub replace_url {
     my ($self, $urn, $oldURL, $newURL) = @_;
 
-#     if (defined $self->{sso_tdie "Not implemented yet.";
-# oken}) {
-#     }
-#     else {
-# 	die "No SSO token acquired, you must log in first.";
-#     }
-# }
+    if (defined $self->{sso_token}) {
+	my $som = $self->{client}->call(
+	    'replaceURL',
+	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
+	    SOAP::Data->value(SOAP::Data->name('URN')->value($urn)),
+	    SOAP::Data->value(SOAP::Data->name('oldURL')->value($old_url)),	    
+	    SOAP::Data->value(SOAP::Data->name('newURL')->value($new_url)),	    
+	    );
+	die $som->faultstring if ($som->fault);
+	return $som->result;
+    } else {
+    	die "No SSO token acquired, you must log in first.";
+    }
 }
 
 sub reserve_next_urn {
-    my ($self, $seriesCode) = @_;
+    my ($self, $series_code) = @_;
 
-    die "Not implemented yet.";
-    # if (defined $self->{sso_token}) {
-    # }
-    # else {
-    # 	die "No SSO token acquired, you must log in first.";
-    # }
+    if (defined $self->{sso_token}) {
+	my $som = $self->{client}->call(
+	    'reserveNextURN',
+	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
+	    SOAP::Data->value(SOAP::Data->name('seriesCode')->value($series_code))
+	    );
+	die $som->faultstring if ($som->fault);
+	return $som->result;
+    } else {
+    	die "No SSO token acquired, you must log in first.";
+    }
 }
 
 sub reserve_urn {
     my ($self, $urn) = @_;
 
-    die "Not implemented yet.";
-    # if (defined $self->{sso_token}) {
-    # }
-    # else {
-    # 	die "No SSO token acquired, you must log in first.";
-    # }
+    if (defined $self->{sso_token}) {
+	my $som = $self->{client}->call(
+	    'reserveURN',
+	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
+	    SOAP::Data->value(SOAP::Data->name('URN')->value($urn))
+	    );
+	die $som->faultstring if ($som->fault);
+	return $som->result;
+    } else {
+    	die "No SSO token acquired, you must log in first.";
+    }
 }
 
 sub set_default_url {
     my ($self, $urn, $url) = @_;
 
-    die "Not implemented yet.";
-    # if (defined $self->{sso_token}) {
-    # }
-    # else {
-    # 	die "No SSO token acquired, you must log in first.";
-    # }
+    if (defined $self->{sso_token}) {
+	my $som = $self->{client}->call(
+	    'setDefaultURL',
+	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
+	    SOAP::Data->value(SOAP::Data->name('URN')->value($urn))
+	    SOAP::Data->value(SOAP::Data->name('URL')->value($url))
+	    );
+	die $som->faultstring if ($som->fault);
+	return $som->result;
+    } else {
+    	die "No SSO token acquired, you must log in first.";
+    }
 }
 
 1;

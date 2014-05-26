@@ -13,19 +13,19 @@ my $default_config = File::Spec->rel2abs(
 );
 
 my $urn;
-my $url;
+my $series_code;
 my $config;
 my $username;
 my $password;
 GetOptions(
+    "series-code" => \$series_code
     "urn=s" => \$urn,
-    "url=s" => \$url,
     "username=s" => \$username,
     "password=s" => \$password,
     "config=s" => \$config
 );
 
-unless ($urn && $url) { die "Usage: register_urn --urn URN --url URL\n"; };
+unless ($series_code && $urn) { die "Usage: create_urn --series-code CODE --urn URN\n"; };
 
 my $c = new NbUrnClient(
     config_file => $config || $default_config,
@@ -34,6 +34,6 @@ my $c = new NbUrnClient(
 );
 
 $c->login();
-print Dumper($c->register_urn($urn, $url));
+print Dumper($c->create_urn($series_code, $urn));
 $c->logout();
 
