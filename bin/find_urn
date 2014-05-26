@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+use strict;
 use File::Basename;
 use File::Spec;
 use Data::Dumper;
@@ -7,12 +8,20 @@ use lib File::Spec->catdir(dirname(__FILE__), '..', 'lib');
 require NbUrnClient;
 use Getopt::Long;
 
-my %options = (); # = {};
-
-GetOptions(
-    \%options,
-    "urn=s"
+my $default_config = File::Spec->rel2abs(
+    File::Spec->catfile(dirname(__FILE__), '..', 'config', 'config.yml')
 );
 
-my $c = new NbUrnClient();
-print Dumper($c->find_urn($options{urn}));
+my $urn;
+my $config;
+GetOptions(
+    "urn=s" => \$urn,
+    "config=s" => \$config
+);
+
+unless ($urn) { die "Usage: find_urn --urn URN\n"; };
+
+my $c = new NbUrnClient(
+    config_file => $config || $default_config
+);
+print Dumper($c->find_urn($urn));
