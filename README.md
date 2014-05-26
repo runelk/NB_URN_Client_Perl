@@ -28,5 +28,4 @@ Dependencies
 
 * SOAP::Lite
 
-Recommendation: Create a virtualenv and install these dependencies using pip.
 
