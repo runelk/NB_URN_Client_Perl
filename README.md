@@ -1,4 +1,4 @@
-Python Client for the URN PID service by the National Library of Norway
+Perl Client for the URN PID service by the National Library of Norway
 =======================================================================
 
 
