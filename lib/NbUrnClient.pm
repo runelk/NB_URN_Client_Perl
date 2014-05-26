@@ -13,7 +13,10 @@ sub new {
     my $self = {};
     $self->{config_file} = $args{config_file};
     $self->{sso_token} = undef;
+
     $self->{config} = YAML::Tiny->read($args{config_file})->[0]->{config}{urn};
+    $self->{config}->{username} = $args{username} || $self->{config}->{username};
+    $self->{config}->{password} = $args{password} || $self->{config}->{password};
 
     $self->{client} = SOAP::Lite->new(proxy => $self->{config}->{proxy});
     $self->{client}->ns('http://nb.no/idservice/v1.0/', 'ns1');
@@ -92,29 +95,43 @@ sub get_next_urn {
 
 sub login {
     my ($self, $username, $password) = @_;
-
+    my $som = $self->{client}->call(
+    	'login',
+	SOAP::Data->value(SOAP::Data->name('username')->value($username || $self->{config}->{username})),
+	SOAP::Data->value(SOAP::Data->name('password')->value($password || $self->{config}->{password}))
+	);
+    die $som->faultstring if ($som->fault);
+    $self->{sso_token} = $som->result;
+    return $som->result;
 }
 
 sub logout {
     my ($self) = @_;
 
-    die "Not implemented yet.";
-#     if (defined $self->{sso_token}) {
-# 	$self->{client}->{service}->logout($self->{sso_token});
-# 	$self->{sso_token} = undef;
-#     }
-# }
+    if (defined $self->{sso_token}) {
+	$self->{client}->call(
+	    'logout',
+	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
+	    );
+	$self->{sso_token} = undef;
+    }
 }
 
 sub register_urn {
     my ($self, $urn, $url) = @_;
 
-    die "Not implemented yet.";
-    # if (defined $self->{sso_token}) {
-    # }
-    # else {
-    # 	die "No SSO token acquired, you must log in first.";
-    # }
+    if (defined $self->{sso_token}) {
+	my $som = $self->{client}->call(
+	    'registerURN',
+	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
+	    SOAP::Data->value(SOAP::Data->name('URN')->value($urn)),
+	    SOAP::Data->value(SOAP::Data->name('URL')->value($url)),	    
+	    );
+	die $som->faultstring if ($som->fault);
+	return $som->result;
+    } else {
+    	die "No SSO token acquired, you must log in first.";
+    }
 }
 
 sub replace_url {
