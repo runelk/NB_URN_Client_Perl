@@ -26,6 +26,10 @@ sub new {
     return $self;
 }
 
+# Add a new URL that is to be associated with the specified URN.
+#         Keyword arguments:
+#         urn -- the URN to associate the new target to 
+#         url -- the URL pointing to the target
 sub add_url {
     my ($self, $urn, $url) = @_;
 
@@ -43,6 +47,14 @@ sub add_url {
     }
 }
 
+# Create a new URN under the specified series/prefix.
+#         Keyword arguments:
+#         series_code -- the series code / prefix under which to create a new URN
+#         url -- the URL pointing to the target of the URN
+#         NB: This will only work if:
+#         - the ID service supports assignment of serial numbers for the specified series, and
+#         - if the user has access to this series.
+#         The created URN is stored in the ID service.
 sub create_urn {
     my ($self, $series_code, $urn) = @_;
 
@@ -60,6 +72,13 @@ sub create_urn {
     }
 }
 
+# Delete a URL pointing to a target associated with the given URN.
+
+#         Keyword arguments:
+#         urn -- the URN associated with the URL to delete
+#         url -- The URL to delete
+
+#         This operation is only allowed as long as there is more than one registered target for the specified URN.
 sub delete_url {
     my ($self, $urn, $url) = @_;
 
@@ -77,6 +96,8 @@ sub delete_url {
     }
 }
 
+# Find a registered URN with all corresponding locations, along with
+#         other registered information regarding the URN.
 sub find_urn {
     my ($self, $urn) = @_;
 
@@ -99,6 +120,16 @@ sub find_urns_for_url {
     return $som->result;
 }
 
+# Request the next available URN from a series/prefix.
+
+#         Keyword arguments:
+#         series_code -- a string containing the series code / prefix
+
+#         NB: This will only work if:
+#         - the ID service supports assignment of serial numbers for the specified series, and
+#         - if the user has access to this series.
+
+#         The returned URN is not stored in the ID service.
 sub get_next_urn {
     my ($self, $seriesCode) = @_;
 
@@ -116,6 +147,15 @@ sub get_next_urn {
     }
 }
 
+# Used to log in to the ID-service.
+
+#         Keyword arguments:
+#         username -- a username string
+#         password -- a password string
+
+#         If no username and/or password is supplied to the method, the
+#         client tries to find the missing information from the YAML
+#         config file.
 sub login {
     my ($self, $username, $password) = @_;
 
@@ -130,6 +170,7 @@ sub login {
     return $som->result;
 }
 
+        # Used to log out of the ID-service.
 sub logout {
     my ($self) = @_;
 
@@ -142,6 +183,13 @@ sub logout {
     }
 }
 
+# Register a new URN and attach it to a target pointed to by the URL.
+
+#         Keyword arguments:
+#         urn -- the URN to register
+#         url -- the URL pointing to the target of the URN
+        
+#         The URN is stored in the ID service.
 sub register_urn {
     my ($self, $urn, $url) = @_;
 
@@ -159,6 +207,12 @@ sub register_urn {
     }
 }
 
+# Replace the location of an existing target identified with the specified URN.
+
+#         Keyword arguments:
+#         urn -- The URN whose target to replace
+#         old_url -- The old URL to be replaced
+#         new_url -- The new URL to replace the old URL with 
 sub replace_url {
     my ($self, $urn, $oldURL, $newURL) = @_;
 
@@ -177,6 +231,13 @@ sub replace_url {
     }
 }
 
+# Create a new URN under the specified series/prefix and reserve it for future use.
+#         Keyword arguments:
+#         series_code -- the series code / prefix under which to reserve a new URN
+#         NB: This will only work if:
+#         - the ID service supports assignment of serial numbers for the specified series, and
+#         - if the user has access to this series.
+# The created URN is stored in the ID service, but is not attached to any locations.
 sub reserve_next_urn {
     my ($self, $series_code) = @_;
 
@@ -193,6 +254,11 @@ sub reserve_next_urn {
     }
 }
 
+# Reserve a URN for future use, without assigning any targets.
+#         Keyword arguments:
+#         urn -- the URN to reserve
+#         The URN is stored in the ID service without any associated targets.
+#         This is only allowed for URNs belonging to a series without serial numbers.
 sub reserve_urn {
     my ($self, $urn) = @_;
 
@@ -209,6 +275,11 @@ sub reserve_urn {
     }
 }
 
+# Set a default URL for a URN.
+#         Keyword arguments:
+#         urn -- the URN to set a default URL for
+#         url -- the default URL to set for the URN
+#         The specified URL must be one that is already registered for the URN.
 sub set_default_url {
     my ($self, $urn, $url) = @_;
 
@@ -224,6 +295,20 @@ sub set_default_url {
     } else {
     	die "No SSO token acquired, you must log in first.";
     }
+}
+
+# Retrieve all series available for the current session. 
+#         The retrieved objecs contain all known information about the series.
+#         This call is currently unimplemented on the server side.
+sub get_all_urn_series {
+    my ($self) = @_;
+    
+}
+
+# Returns the current API version.
+#         This call is currently unimplemented on the server side.
+sub get_version {
+    my ($self) = @_;
 }
 
 1;
