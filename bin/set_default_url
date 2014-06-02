@@ -25,7 +25,7 @@ GetOptions(
     "config=s" => \$config
 );
 
-unless ($series_code) { die "Usage: set_default_url --urn URN --url URL\n"; };
+unless ($urn and $url) { die "Usage: set_default_url --urn URN --url URL\n"; };
 
 my $c = new NbUrnClient(
     config_file => $config || $default_config,

@@ -56,14 +56,14 @@ sub add_url {
 #         - if the user has access to this series.
 #         The created URN is stored in the ID service.
 sub create_urn {
-    my ($self, $series_code, $urn) = @_;
+    my ($self, $series_code, $url) = @_;
 
     if (defined $self->{sso_token}) {
 	my $som = $self->{client}->call(
 	    'createURN',
 	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
 	    SOAP::Data->value(SOAP::Data->name('seriesCode')->value($series_code)),
-	    SOAP::Data->value(SOAP::Data->name('URN')->value($urn)),	    
+	    SOAP::Data->value(SOAP::Data->name('URN')->value($url)),	    
 	    );
 	die $som->faultstring if ($som->fault);
 	return $som->result;
@@ -131,13 +131,13 @@ sub find_urns_for_url {
 
 #         The returned URN is not stored in the ID service.
 sub get_next_urn {
-    my ($self, $seriesCode) = @_;
+    my ($self, $series_code) = @_;
 
     if (defined $self->{sso_token}) {
 	my $som = $self->{client}->call(
 	    'getNextURN',
 	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
-	    SOAP::Data->value(SOAP::Data->name('seriesCode')->value($urn))
+	    SOAP::Data->value(SOAP::Data->name('seriesCode')->value($series_code))
 	    );
 
 	die $som->faultstring if ($som->fault);
@@ -214,7 +214,7 @@ sub register_urn {
 #         old_url -- The old URL to be replaced
 #         new_url -- The new URL to replace the old URL with 
 sub replace_url {
-    my ($self, $urn, $oldURL, $newURL) = @_;
+    my ($self, $urn, $old_url, $new_url) = @_;
 
     if (defined $self->{sso_token}) {
 	my $som = $self->{client}->call(
@@ -287,7 +287,7 @@ sub set_default_url {
 	my $som = $self->{client}->call(
 	    'setDefaultURL',
 	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
-	    SOAP::Data->value(SOAP::Data->name('URN')->value($urn))
+	    SOAP::Data->value(SOAP::Data->name('URN')->value($urn)),
 	    SOAP::Data->value(SOAP::Data->name('URL')->value($url))
 	    );
 	die $som->faultstring if ($som->fault);

@@ -28,7 +28,6 @@ GetOptions(
 );
 
 unless ($urn && $old_url && $new_url) { die "Usage: replace_url --urn URN --old-url URL --new-url URL\n"; };
-
 my $c = new NbUrnClient(
     config_file => $config || $default_config,
     username => $username,

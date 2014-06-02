@@ -25,7 +25,7 @@ GetOptions(
     "config=s" => \$config
 );
 
-unless ($urn && $url) { die "Usage: create_urn --series-code CODE --urn URN\n"; };
+unless ($urn && $url) { die "Usage: delete_url --urn URN --url URL\n"; };
 
 my $c = new NbUrnClient(
     config_file => $config || $default_config,
