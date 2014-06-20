@@ -11,7 +11,7 @@ Configuration
 -------------
 
 The **config** directory contains an example of the YAML config file used by the client.
-Replace the dummy entries with the information you have received from the National Library and put it in a `config.yml` file in the same directory.
+Copy this to e.g. **config.yml** and replace the dummy entries with the information you have received from the National Library.
 
 Command Line Tools
 ------------------
