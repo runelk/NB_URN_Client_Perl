@@ -18,7 +18,7 @@ my $config;
 my $username;
 my $password;
 GetOptions(
-    "series-code" => \$series_code,
+    "series-code=s" => \$series_code,
     "url=s" => \$url,
     "username=s" => \$username,
     "password=s" => \$password,
