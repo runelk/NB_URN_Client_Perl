@@ -63,7 +63,7 @@ sub create_urn {
 	    'createURN',
 	    SOAP::Data->value(SOAP::Data->name('SSOToken')->value($self->{sso_token})),	    
 	    SOAP::Data->value(SOAP::Data->name('seriesCode')->value($series_code)),
-	    SOAP::Data->value(SOAP::Data->name('URN')->value($url)),	    
+	    SOAP::Data->value(SOAP::Data->name('URL')->value($url)),	    
 	    );
 	die $som->faultstring if ($som->fault);
 	return $som->result;
